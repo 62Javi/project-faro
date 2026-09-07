@@ -1,0 +1,36 @@
+# Registro de Decisiones de Arquitectura e Inteligencia Artificial (AI-DECISIONS.md)
+
+> **Materia:** Desarrollo de Software Cloud (2° Cuatrimestre 2026) — UTN FRLP  
+> **Docentes:** Ing. Rafael Villalba | Ing. Matías Area  
+> **Proyecto:** Faro — Plataforma Integral para Restaurantes con IA Multimodal  
+> **Integrantes:**  
+> - Sixto Javier Castro Cope — Legajo: 32797 — GitHub: [@62Javi](https://github.com/62Javi)  
+> - Esteban Suarez — Legajo: 28077 — GitHub: [@Esteban-Suarez-hub](https://github.com/Esteban-Suarez-hub)  
+
+---
+
+## 1. Propósito y Metodología de este Registro
+
+En concordancia con el estándar pedagógico de la cátedra (*"El nuevo rol del ingeniero: AI Decision Log"*), el equipo asume la responsabilidad integral sobre la arquitectura, seguridad, resiliencia y eficiencia de costos de la solución. La Inteligencia Artificial se utiliza como un acelerador de productividad y consultor de diseño, pero **cada fragmento de código, esquema y decisión cloud es auditado críticamente por los ingenieros**.
+
+Este log documenta la evolución cronológica del proyecto, vinculando cada intervención de IA con su correspondiente implementación en el repositorio, explicitando las correcciones humanas ante alucinaciones, brechas de seguridad o ineficiencias de arquitectura.
+
+---
+
+### Entrada #1: Modelado de Persistencia y Seguridad Multi-tenant en Supabase (PostgreSQL)
+
+- **Fecha:** 2026-09-07  
+- **Responsable:** Sixto Javier Castro Cope  
+- **Problema abordado:** Definir el esquema relacional en PostgreSQL para soportar una arquitectura multi-tenant (múltiples restaurantes aislados), control de estados de comandas y permisos de lectura pública para clientes anónimos en mesas.
+- **Herramienta utilizada:**  
+  Google Gemini 3.8 Flash / Antigravity Assistant.  
+  *Prompt:*  
+  > *"Genera un script DDL SQL para PostgreSQL en Supabase que gestione restaurantes, cartas con categorías y platos con alérgenos en arrays, mesas y pedidos con estados. Necesito que los clientes de la mesa puedan leer platos y crear pedidos sin registrarse en Clerk."*
+- **Código / Arquitectura generada por la IA:**  
+  La IA propuso tablas normalizadas con claves foráneas, usando `status VARCHAR(50)` libre para los pedidos y una política RLS abierta de la forma `CREATE POLICY "Permitir todo" ON orders FOR ALL USING (true);`. Además, para los alérgenos propuso una tabla intermedia `dish_allergens` relacional de muchos a muchos.
+- **Validación y Corrección Humana (Auditoría Técnica):**  
+  1. **Seguridad Crítica (RLS):** La política propuesta por la IA (`FOR ALL USING (true)`) permitía que cualquier cliente anónimo pudiera no solo insertar pedidos, sino también modificar estados de otros pedidos o eliminarlos. Se refactorizó separando estrictamente: `CREATE POLICY "Public order creation" ON orders FOR INSERT WITH CHECK (true);` mientras que las actualizaciones (`UPDATE`) quedaron restringidas al personal de salón y cocina mediante roles.
+  2. **Modelado y Performance:** Para alérgenos y etiquetas fijas (`allergens`, `tags`), la tabla intermedia generaba múltiples joins innecesarios en la lectura de la carta. Se optimizó adoptando tipos nativos de PostgreSQL `TEXT[] DEFAULT '{}'`, reduciendo la latencia de consulta en el Edge.
+  3. **Integridad de Dominio:** Se rechazó el campo `status VARCHAR` libre y se creó un tipo estructurado `CREATE TYPE order_status_enum` con estados estrictos (`pendiente_mozo`, `en_cocina`, `en_preparacion`, `listo`, `entregado`, `cancelado`) para prevenir inconsistencias en la máquina de estados.
+
+---
