@@ -34,3 +34,20 @@ Este log documenta la evolución cronológica del proyecto, vinculando cada inte
   3. **Integridad de Dominio:** Se rechazó el campo `status VARCHAR` libre y se creó un tipo estructurado `CREATE TYPE order_status_enum` con estados estrictos (`pendiente_mozo`, `en_cocina`, `en_preparacion`, `listo`, `entregado`, `cancelado`) para prevenir inconsistencias en la máquina de estados.
 
 ---
+
+### Entrada #2: Estrategia de Resiliencia y Almacén Turnkey In-Memory
+
+- **Fecha:** 2026-09-13  
+- **Responsable:** Sixto Javier Castro Cope  
+- **Problema abordado:** Garantizar alta disponibilidad y funcionamiento de desarrollo/demo ante microcortes o latencias elevadas en la conexión externa con Supabase DB.
+- **Herramienta utilizada:**  
+  Google Gemini 3.8 Flash.  
+  *Prompt:*  
+  > *"Escribe una clase singleton en Python con FastAPI para conectar con Supabase Client. Si las credenciales no están presentes en el .env, lanza una excepción de terminación inmediata."*
+- **Código / Arquitectura generada por la IA:**  
+  La IA propuso un código rígido con `if not url or not key: sys.exit(1)`, deteniendo el arranque del contenedor de FastAPI si fallaban las variables de entorno o la conexión de red.
+- **Validación y Corrección Humana (Auditoría Técnica):**  
+  1. **Resiliencia Cloud (Zero-Downtime):** En un entorno SaaS con demos continuas y evaluación de cátedra, tumbar el contenedor ante la falta temporal de red atenta contra el principio de degradación elegante (*graceful degradation*).
+  2. **Patrón Turnkey Store:** Se rediseñó la arquitectura creando la clase `DatabaseStore` (`backend/app/core/supabase.py`). Si Supabase está disponible, se sincroniza; si no hay variables configuradas o se produce un timeout, el sistema inicializa un almacén turnkey en memoria precargado con datos del restaurante de demo (`rest_faro_demo`), permitiendo que el 100% de los endpoints (carta, pedidos, mozo, cocina) sigan operativos sin caídas.
+
+---
