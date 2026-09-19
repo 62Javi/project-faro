@@ -51,3 +51,20 @@ Este log documenta la evolución cronológica del proyecto, vinculando cada inte
   2. **Patrón Turnkey Store:** Se rediseñó la arquitectura creando la clase `DatabaseStore` (`backend/app/core/supabase.py`). Si Supabase está disponible, se sincroniza; si no hay variables configuradas o se produce un timeout, el sistema inicializa un almacén turnkey en memoria precargado con datos del restaurante de demo (`rest_faro_demo`), permitiendo que el 100% de los endpoints (carta, pedidos, mozo, cocina) sigan operativos sin caídas.
 
 ---
+
+### Entrada #3: Gestión de Estado del Carrito Local-First en Mesa vs Persistencia Remota
+
+- **Fecha:** 2026-09-19  
+- **Responsable:** Esteban Suarez  
+- **Problema abordado:** Gestionar la acumulación de platos en el pedido de la mesa antes del envío definitivo al personal de salón.
+- **Herramienta utilizada:**  
+  GitHub Copilot (Claude 3.5 Sonnet).  
+  *Prompt:*  
+  > *"Crea un hook useCart en React que guarde cada plato agregado directamente en la base de datos de Supabase mediante un POST cada vez que el usuario hace click."*
+- **Código / Arquitectura generada por la IA:**  
+  La IA sugirió disparar una petición HTTP POST hacia el backend/Supabase en cada incremento o decremento de cantidades en la interfaz de la mesa.
+- **Validación y Corrección Humana (Auditoría Técnica):**  
+  1. **Optimización de Costos y Tráfico Cloud:** Disparar peticiones remotas por cada modificación de cantidad genera un tráfico I/O excesivo, costos innecesarios en Cloud Run / Supabase y una experiencia lenta si la cobertura celular en el local es baja.
+  2. **Patrón Local-First:** Se implementó una gestión de estado client-side reactiva (`useCart`) con persistencia en `localStorage` del dispositivo del comensal. El backend solo se contacta mediante un único POST transaccional cuando el cliente presiona "Confirmar Pedido", reduciendo las llamadas de red en más de un 80% y brindando respuesta instantánea en la interfaz.
+
+---
