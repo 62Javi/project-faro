@@ -68,3 +68,20 @@ Este log documenta la evolución cronológica del proyecto, vinculando cada inte
   2. **Patrón Local-First:** Se implementó una gestión de estado client-side reactiva (`useCart`) con persistencia en `localStorage` del dispositivo del comensal. El backend solo se contacta mediante un único POST transaccional cuando el cliente presiona "Confirmar Pedido", reduciendo las llamadas de red en más de un 80% y brindando respuesta instantánea en la interfaz.
 
 ---
+
+### Entrada #4: Broadcast en Tiempo Real con WebSockets para Salón y Cocina (KDS)
+
+- **Fecha:** 2026-09-22  
+- **Responsable:** Sixto Javier Castro Cope  
+- **Problema abordado:** Comunicación bidireccional instantánea entre comensales, mozos y la pantalla de cocina (Kitchen Display System), garantizando que las desconexiones por inestabilidad de WiFi móvil no cuelguen el servidor.
+- **Herramienta utilizada:**  
+  Google Gemini 3.7 Flash.  
+  *Prompt:*  
+  > *"Implementa un ConnectionManager en FastAPI con WebSockets para enviar mensajes de pedidos nuevos a cocina y mozos agrupados por restaurant_id."*
+- **Código / Arquitectura generada por la IA:**  
+  La IA generó un diccionario `self.active_connections: Dict[str, List[WebSocket]]` que iteraba sobre la lista original durante el broadcast: `for ws in self.active_connections[id]: await ws.send_text(...)`.
+- **Validación y Corrección Humana (Auditoría Técnica):**  
+  1. **Prevención de Concurrency Bug & Memory Leak:** Si un socket se desconectaba bruscamente (ej. el mozo bloquea su teléfono) en pleno ciclo de broadcast, el método arrojaba una excepción `RuntimeError: dictionary/list changed size during iteration` y la conexión muerta permanecía en memoria indefinidamente.
+  2. **Solución Implementada:** Se modificó la iteración sobre una copia defensiva de la lista `list(self.kitchen_connections[restaurant_id])` encapsulada en bloques `try/except Exception` que invocan automáticamente `disconnect_kitchen()` o `disconnect_waiter()` ante cualquier socket roto, liberando recursos inmediatamente y evitando el colapso del event loop de asyncio.
+
+---
