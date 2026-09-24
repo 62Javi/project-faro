@@ -85,3 +85,20 @@ Este log documenta la evolución cronológica del proyecto, vinculando cada inte
   2. **Solución Implementada:** Se modificó la iteración sobre una copia defensiva de la lista `list(self.kitchen_connections[restaurant_id])` encapsulada en bloques `try/except Exception` que invocan automáticamente `disconnect_kitchen()` o `disconnect_waiter()` ante cualquier socket roto, liberando recursos inmediatamente y evitando el colapso del event loop de asyncio.
 
 ---
+
+### Entrada #5: Manejo de Alertas Sonoras en Cocina (KDS) y Política de Autoplay del Navegador
+
+- **Fecha:** 2026-09-24  
+- **Responsable:** Esteban Suarez  
+- **Problema abordado:** Alertar sonoramente al personal de cocina ante la llegada de una nueva comanda confirmada por el mozo.
+- **Herramienta utilizada:**  
+  Claude 3.5 Sonnet / Frontend Copilot.  
+  *Prompt:*  
+  > *"En el monitor de cocina de Next.js, reproduce un sonido campana cada vez que llega un evento por WebSocket usando new Audio('/bell.mp3').play()."*
+- **Código / Arquitectura generada por la IA:**  
+  La IA colocó la llamada directa a `audio.play()` dentro del listener `ws.onmessage`.
+- **Validación y Corrección Humana (Auditoría Técnica):**  
+  1. **Bloqueo por Autoplay Policy de Navegadores:** Todos los navegadores modernos (Chrome, Safari, Edge) bloquean la reproducción de audio no iniciada por un gesto explícito del usuario (`NotAllowedError: play() failed because the user didn't interact with the document first`). En un monitor de cocina pasivo, la alerta sonora no sonaba nunca sin que el cocinero lo supiera.
+  2. **Solución Implementada:** Se incorporó un banner flotante inicial con el botón "Habilitar Alertas de Audio en Cocina". Al interactuar una única vez al iniciar el turno, se inicializa el `AudioContext` o se reproduce un audio silenciado, desbloqueando legalmente el canal de audio para todos los eventos WebSocket posteriores.
+
+---
