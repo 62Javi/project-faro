@@ -102,3 +102,45 @@ Este log documenta la evolución cronológica del proyecto, vinculando cada inte
   2. **Solución Implementada:** Se incorporó un banner flotante inicial con el botón "Habilitar Alertas de Audio en Cocina". Al interactuar una única vez al iniciar el turno, se inicializa el `AudioContext` o se reproduce un audio silenciado, desbloqueando legalmente el canal de audio para todos los eventos WebSocket posteriores.
 
 ---
+
+### Entrada #6: Procesamiento de Cartas con Visión Multimodal (Structured Outputs vs OCR Tradicional)
+
+- **Fecha:** 2026-09-25  
+- **Responsable:** Sixto Javier Castro Cope  
+- **Problema abordado:** Reducir la barrera de digitalización para dueños gastronómicos, procesando fotos o PDFs de cartas físicas para extraer platos, categorías, precios y alérgenos de forma estructurada.
+- **Herramienta utilizada:**  
+  Google Gemini 3.8 Flash (Multimodal).  
+  *Prompt:*  
+  > *"Cómo puedo procesar una carta de restaurante física (fotos o PDF) para parsear los precios, platos y categorías a JSON?"*
+- **Código / Arquitectura generada por la IA:**  
+  La IA propuso inicialmente dos enfoques alternativos:
+  1. Instalar `pytesseract` y `pdf2image` en el backend, aplicando preprocesamiento de imagen con OpenCV y expresiones regulares complejas para matchear precios y descripciones.
+  2. O bien recurrir a APIs aisladas de OCR (como Google Cloud Vision API o el antiguo endpoint `gemini-1.0-pro-vision`).
+- **Validación y Corrección Humana (Auditoría Técnica):**  
+  1. **Auditoría de Tecnologías Obsoletas y Complejidad:**  
+     - El endpoint `gemini-1.0-pro-vision` fue descontinuado y apagado por Google en julio de 2024. Su inclusión hubiera introducido deuda técnica y llamadas fallidas.  
+     - Utilizar OCR tradicional (Tesseract) requería compilar binarios pesados en el contenedor de Docker (`libtesseract-dev`, `poppler-utils`), triplicando el tamaño de la imagen de Cloud Run y fallando con cartas de tipografía estilizada o columnas múltiples.  
+     - Recurrir a Google Cloud Vision API agregaba un servicio desacoplado adicional con costos por transacción y la necesidad de un pipeline secundario de procesamiento NLP.
+  2. **Decisión de Arquitectura Moderna:**  
+     - Se adoptó **Google Gemini 3.8 Flash** aprovechando su **multimodalidad nativa**. En las generaciones actuales de Gemini no se precisan endpoints satélite de visión: el modelo general procesa simultáneamente texto, imagen y layouts complejos.  
+     - Se utilizó la funcionalidad de **Structured Outputs** (`response_mime_type: "application/json"` guiado por el esquema Pydantic `MenuExtractionResult`).  
+     - Con una única petición HTTP se extrae el texto, se estructuran las categorías, se normalizan los precios flotantes y se infieren alérgenos con alta precisión semántica, reduciendo el código de parsing a cero y manteniendo el contenedor Docker en un runtime de Python puro.
+
+---
+
+### Entrada #7: Sommelier Virtual con Function Calling e Integridad de Precios
+
+- **Fecha:** 2026-09-25  
+- **Responsable:** Esteban Suarez / Sixto Javier Castro Cope  
+- **Problema abordado:** Transformar el chat del comensal de un bot conversacional genérico a un agente transaccional capaz de consultar stock en vivo y modificar el carrito de compras en la mesa.
+- **Herramienta utilizada:**  
+  Google Gemini 3.8 Flash (Function Calling).  
+  *Prompt:*  
+  > *"Diseña las definiciones de herramientas para Gemini en Python para que el bot pueda responder sobre celiaquía y meter platos al carrito de compras según lo que pida el usuario."*
+- **Código / Arquitectura generada por la IA:**  
+  La IA propuso una tool `agregar_al_carrito(nombre_plato: str, cantidad: int)` donde el modelo infería el precio y el ID del plato basándose libremente en el texto de la conversación.
+- **Validación y Corrección Humana (Auditoría Técnica):**  
+  1. **Riesgo Crítico de Alucinación y Vulnerabilidad Comercial:** Si el modelo genera el precio o el ID por su cuenta, un prompt injection o una alucinación podría fijar precios arbitrarios (ej. "Ojo de Bife a $0") o IDs inexistentes en el sistema transaccional.
+  2. **Corrección Humana:** Se desacopló la decisión del modelo de la mutación contable. La herramienta se diseñó para recibir `plato_id` y `nombre_plato`. Al ejecutarse en `_execute_tool`, el backend busca el plato contra el catálogo verificado en base de datos (`db_store.dishes`), valida stock e inyecta el precio oficial del servidor. El frontend recibe una acción formal tipada `ADD_TO_CART` (`ActionItem`), garantizando integridad financiera absoluta.
+
+---
