@@ -71,7 +71,7 @@ flowchart TD
 
     ClientBrowser -->|REST API: Catálogo, Pedidos y Chat| FastAPIApp
     AdminLaptop -->|REST API: Menú y Métricas| FastAPIApp
-    AdminLaptop -->|Upload de carta (PDF / Imagen)| FastAPIApp
+    AdminLaptop -->|Upload de carta PDF o Imagen| FastAPIApp
 
     FastAPIApp -->|Structured Outputs Multimodal| GeminiAPI
     FastAPIApp -->|Function Calling / Tool Execution| GeminiAPI
