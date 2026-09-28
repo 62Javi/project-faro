@@ -144,3 +144,30 @@ Este log documenta la evolución cronológica del proyecto, vinculando cada inte
   2. **Corrección Humana:** Se desacopló la decisión del modelo de la mutación contable. La herramienta se diseñó para recibir `plato_id` y `nombre_plato`. Al ejecutarse en `_execute_tool`, el backend busca el plato contra el catálogo verificado en base de datos (`db_store.dishes`), valida stock e inyecta el precio oficial del servidor. El frontend recibe una acción formal tipada `ADD_TO_CART` (`ActionItem`), garantizando integridad financiera absoluta.
 
 ---
+
+### Entrada #8: Orquestación en Contenedores y Aislamiento de Variables de Entorno
+
+- **Fecha:** 2026-09-27  
+- **Responsable:** Sixto Javier Castro Cope  
+- **Problema abordado:** Configuración de `docker-compose.yml` para correr backend y frontend desacoplados simulando el despliegue distribuido de producción (Cloud Run + Vercel).
+- **Herramienta utilizada:**  
+  Google Gemini 3.6 Flash / GitHub Copilot.  
+  *Prompt:*  
+  > *"Escribe un docker-compose.yml para levantar FastAPI y Next.js comunicados en la misma red de docker."*
+- **Código / Arquitectura generada por la IA:**  
+  La IA configuró las variables de entorno de Next.js como:
+  ```yaml
+  environment:
+    - NEXT_PUBLIC_API_URL=http://backend:8000/api
+    - NEXT_PUBLIC_WS_URL=ws://backend:8000
+  ```
+- **Validación y Corrección Humana (Auditoría Técnica):**  
+  1. **Auditoría de Networking Web:** En Next.js, las variables con prefijo `NEXT_PUBLIC_` son evaluadas en el contexto de ejecución del navegador del cliente (browser en la máquina host o smartphone). `backend` es un nombre de host resoluble únicamente dentro del bridge virtual de Docker; en el navegador del usuario provoca errores inmediatos de `ERR_NAME_NOT_RESOLVED`.
+  2. **Corrección Aplicada:** Se corrigió la configuración para apuntar a `http://localhost:8000/api` y `ws://localhost:8000` con soporte para sobreescritura vía variables de entorno en producción (Vercel hacia Google Cloud Run con HTTPS/WSS seguros).
+
+---
+
+## 2. Conclusiones de la Auditoría Continua
+
+1. **Aceleración del Desarrollo:** La asistencia de modelos de lenguaje aceleró la redacción de esqueletos de código, DDL preliminar y estructuras de tipos.
+2. **Supervisión de Dominio y Seguridad:** En todos los casos analizados, la propuesta preliminar de los modelos requirió corrección humana sustancial: endurecimiento de políticas RLS, mitigación de fallos de red en WebSockets, prevención de mutaciones financieras no autorizadas y corrección de dependencias desactualizadas o incompatibles con entornos cloud modernos.

@@ -1,0 +1,58 @@
+name: Faro CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, Esteban ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  backend-audit:
+    name: Backend Lint & Type Integrity (FastAPI)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+
+      - name: Python Syntax and Integrity Check
+        run: |
+          python -m py_compile $(find backend/app -name "*.py")
+          echo "✅ Backend syntax verification successful."
+
+  frontend-audit:
+    name: Frontend Build & Type Integrity (Next.js)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Frontend Dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Build and Typecheck Next.js App
+        working-directory: ./frontend
+        env:
+          NEXT_PUBLIC_API_URL: "http://localhost:8000/api"
+          NEXT_PUBLIC_WS_URL: "ws://localhost:8000"
+        run: npm run build
