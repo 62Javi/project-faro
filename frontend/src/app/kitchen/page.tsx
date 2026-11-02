@@ -6,7 +6,7 @@ import { api } from '@/lib/api';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { OrderTicket } from '@/components/kitchen/OrderTicket';
 import { playNotificationSound } from '@/components/common/AudioAlert';
-import { ChefHat, Wifi, WifiOff, RefreshCw, Flame, CheckCircle, Volume2 } from 'lucide-react';
+import { ChefHat, Wifi, WifiOff, Flame, CheckCircle, Volume2 } from 'lucide-react';
 
 export default function KitchenPage() {
   const restaurantId = 'rest_faro_demo';
@@ -19,7 +19,6 @@ export default function KitchenPage() {
     try {
       setIsLoading(true);
       const data = await api.getOrders(restaurantId);
-      // Filter orders relevant for kitchen
       const activeKitchen = data.filter((o) =>
         ['en_cocina', 'en_preparacion', 'listo'].includes(o.status)
       );
@@ -72,47 +71,47 @@ export default function KitchenPage() {
   const readyCount = orders.filter((o) => o.status === 'listo').length;
 
   return (
-    <div className="flex-1 bg-navy-950 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
+    <div className="flex-1 bg-slate-50 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-white/10">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-slate-200">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold border border-emerald-500/30">
+            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
               <ChefHat className="w-3.5 h-3.5" />
               Kitchen Display System (KDS)
             </span>
             <span
               className={`flex items-center gap-1 text-[11px] px-2.5 py-0.5 rounded-full border ${
                 isConnected
-                  ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
-                  : 'bg-amber-500/20 text-amber-400 border-amber-500/30'
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                  : 'bg-amber-50 text-amber-700 border-amber-200'
               }`}
             >
               {isConnected ? <Wifi className="w-3 h-3" /> : <WifiOff className="w-3 h-3" />}
               {isConnected ? 'En Vivo (WebSockets)' : 'Reconectando...'}
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-white">Monitor de Cocina & Fuegos</h1>
-          <p className="text-slate-400 text-xs sm:text-sm mt-0.5">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900">Monitor de Cocina & Fuegos</h1>
+          <p className="text-slate-600 text-xs sm:text-sm mt-0.5">
             Comandas aprobadas por mozos listas para cocción y despacho.
           </p>
         </div>
 
         {/* Status Pills */}
         <div className="flex items-center gap-3">
-          <div className="px-4 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold flex items-center gap-2">
-            <Flame className="w-4 h-4" />
+          <div className="px-4 py-2 rounded-xl bg-orange-50 border border-orange-200 text-faro-700 text-xs font-bold flex items-center gap-2">
+            <Flame className="w-4 h-4 text-faro-600" />
             <span>En Marcha: {activeCount}</span>
           </div>
 
-          <div className="px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center gap-2">
-            <CheckCircle className="w-4 h-4" />
+          <div className="px-4 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold flex items-center gap-2">
+            <CheckCircle className="w-4 h-4 text-emerald-600" />
             <span>Listos: {readyCount}</span>
           </div>
 
           <button
             onClick={() => playNotificationSound()}
-            className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 transition-colors"
+            className="p-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 shadow-xs transition-colors"
             title="Probar sonido de timbre"
           >
             <Volume2 className="w-4 h-4" />
@@ -123,12 +122,12 @@ export default function KitchenPage() {
       {/* Orders Grid */}
       <div className="mt-6">
         {orders.length === 0 ? (
-          <div className="py-24 text-center space-y-3 bg-navy-900/40 rounded-3xl border border-white/5">
-            <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 text-emerald-400 mx-auto flex items-center justify-center">
+          <div className="py-24 text-center space-y-3 bg-white rounded-3xl border border-slate-200 shadow-xs">
+            <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 mx-auto flex items-center justify-center border border-emerald-200">
               <ChefHat className="w-7 h-7" />
             </div>
-            <h3 className="text-xl font-bold text-white">Cocina al Día • No hay comandas pendientes</h3>
-            <p className="text-slate-400 text-xs max-w-sm mx-auto">
+            <h3 className="text-xl font-bold text-slate-900">Cocina al Día • No hay comandas pendientes</h3>
+            <p className="text-slate-500 text-xs max-w-sm mx-auto">
               Cuando el personal de salón confirme una orden, aparecerá instantáneamente en esta pantalla con alerta sonora.
             </p>
           </div>

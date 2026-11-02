@@ -2,56 +2,81 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Flame, Utensils, Bell, ChefHat, LayoutDashboard, QrCode } from 'lucide-react';
+import { Flame, Sparkles, User } from 'lucide-react';
 
 export function Navbar() {
   const pathname = usePathname();
-
-  const links = [
-    { href: '/', label: 'Inicio', icon: Flame },
-    { href: '/menu/rest_faro_demo?mesa=3', label: 'Menú Comensal (QR)', icon: Utensils },
-    { href: '/waiter', label: 'Mozo (Salón)', icon: Bell },
-    { href: '/kitchen', label: 'Cocina (KDS)', icon: ChefHat },
-    { href: '/admin', label: 'Panel Dueño', icon: LayoutDashboard },
-  ];
+  const isHome = pathname === '/';
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-navy-950/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full border-b border-neutral-200/70 bg-white/80 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-faro-500 to-faro-700 flex items-center justify-center text-white shadow-lg shadow-faro-600/30 group-hover:scale-105 transition-transform">
-            <Flame className="w-6 h-6" />
+          <div className="w-8 h-8 rounded-xl bg-neutral-900 flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform duration-200">
+            <Flame className="w-4 h-4 text-white" />
           </div>
-          <div>
-            <span className="text-xl font-bold tracking-wider text-white">FARO</span>
-            <span className="hidden sm:inline-block ml-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-faro-500/20 text-faro-400 border border-faro-500/30">
-              Cloud & AI 2026
+          <div className="flex items-center gap-2">
+            <span className="text-base font-bold tracking-tight text-neutral-900">FARO</span>
+            <span className="hidden sm:inline-block text-[10px] font-medium tracking-wide uppercase px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-600 border border-neutral-200/60">
+              SaaS Gastronómico
             </span>
           </div>
         </Link>
 
         {/* Navigation Links */}
-        <nav className="flex items-center gap-1 sm:gap-2">
-          {links.map((link) => {
-            const Icon = link.icon;
-            const isActive = pathname === link.href || (link.href.includes('menu') && pathname.startsWith('/menu'));
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
-                  isActive
-                    ? 'bg-faro-600 text-white shadow-md shadow-faro-600/20'
-                    : 'text-slate-300 hover:text-white hover:bg-white/5'
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-                <span className="hidden md:inline">{link.label}</span>
-              </Link>
-            );
-          })}
-        </nav>
+        {isHome ? (
+          <nav className="hidden md:flex items-center gap-6 text-xs font-medium text-neutral-500 tracking-normal">
+            <a href="#ecosistema" className="hover:text-neutral-900 transition-colors">
+              Simulador
+            </a>
+            <a href="#ciclo-qr" className="hover:text-neutral-900 transition-colors">
+              Ciclo QR
+            </a>
+            <a href="#ia-gemini" className="hover:text-neutral-900 transition-colors">
+              Sommelier IA
+            </a>
+            <a href="#calculadora" className="hover:text-neutral-900 transition-colors">
+              Calculadora
+            </a>
+            <a href="#precios" className="hover:text-neutral-900 transition-colors">
+              Planes
+            </a>
+            <a href="#faq" className="hover:text-neutral-900 transition-colors">
+              FAQ
+            </a>
+          </nav>
+        ) : (
+          <nav className="flex items-center gap-2">
+            <Link
+              href="/"
+              className="text-xs font-medium text-neutral-600 hover:text-neutral-900 px-3 py-1.5 rounded-full hover:bg-neutral-100 transition-colors"
+            >
+              &larr; Volver al Inicio
+            </Link>
+          </nav>
+        )}
+
+        {/* Action Buttons */}
+        <div className="flex items-center gap-2.5">
+          {/* Botón directo Iniciar Sesión con Icono de Usuario */}
+          <Link
+            href="/login"
+            className="flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-medium text-neutral-800 hover:text-neutral-950 hover:bg-neutral-50 transition-all border border-neutral-200/90 shadow-2xs active:scale-98"
+          >
+            <div className="w-5 h-5 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-700">
+              <User className="w-3 h-3" />
+            </div>
+            <span className="hidden sm:inline">Iniciar sesión</span>
+          </Link>
+
+          <Link
+            href="/login"
+            className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-medium bg-neutral-900 hover:bg-black text-white shadow-xs transition-all active:scale-98"
+          >
+            <span>Registrarse</span>
+          </Link>
+        </div>
       </div>
     </header>
   );

@@ -4,35 +4,170 @@
 
 @layer base {
   body {
-    @apply bg-navy-950 text-slate-100 antialiased selection:bg-faro-500 selection:text-white min-h-screen;
+    @apply bg-[#FAFAFA] text-neutral-900 antialiased selection:bg-neutral-900 selection:text-white min-h-screen;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 }
 
-/* Custom animations */
+/* Fluid micro-animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.animate-fadeIn {
-  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+@keyframes scanBeam {
+  0% { transform: translateY(0%); opacity: 0.8; }
+  50% { transform: translateY(240px); opacity: 1; }
+  100% { transform: translateY(0%); opacity: 0.8; }
 }
 
-/* Custom scrollbars */
+@keyframes ticketPop {
+  0% { transform: scale(0.92) translateY(-10px); opacity: 0; }
+  70% { transform: scale(1.02) translateY(2px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+@keyframes subtleFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes isometricGlide {
+  0% {
+    transform: translateY(0px) rotateX(16deg) rotateY(-24deg) rotateZ(4deg);
+  }
+  50% {
+    transform: translateY(-16px) rotateX(20deg) rotateY(-18deg) rotateZ(7deg);
+  }
+  100% {
+    transform: translateY(0px) rotateX(16deg) rotateY(-24deg) rotateZ(4deg);
+  }
+}
+
+@keyframes lightSweep {
+  0% { transform: translateX(-100%) rotate(45deg); opacity: 0; }
+  50% { opacity: 0.6; }
+  100% { transform: translateX(200%) rotate(45deg); opacity: 0; }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slideRight {
+  animation: slideInRight 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-isometric {
+  animation: isometricGlide 7s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
+.animate-sweep {
+  animation: lightSweep 4s ease-in-out infinite;
+}
+
+.animate-scan {
+  animation: scanBeam 2.5s ease-in-out infinite;
+}
+
+.animate-ticket {
+  animation: ticketPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.animate-float {
+  animation: subtleFloat 5s ease-in-out infinite;
+}
+
+.animate-pulseGlow {
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+/* Custom Minimalist Slider */
+.slider-mobbin {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #e4e4e7;
+  border-radius: 9999px;
+  outline: none;
+  transition: background 0.2s;
+}
+
+.slider-mobbin::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #09090b;
+  cursor: pointer;
+  border: 2.5px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  transition: transform 0.15s ease, background-color 0.15s;
+}
+
+.slider-mobbin::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  background: #18181b;
+}
+
+.slider-mobbin::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #09090b;
+  cursor: pointer;
+  border: 2.5px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  transition: transform 0.15s ease;
+}
+
+/* Glass & Refined Borders */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.glass-panel-elevated {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+}
+
+/* Custom refined scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.02);
+  background: #f1f5f9;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: #cbd5e1;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(242, 116, 38, 0.5);
+  background: #f27426;
 }
 
 @media print {

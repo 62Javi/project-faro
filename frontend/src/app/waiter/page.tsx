@@ -56,32 +56,31 @@ export default function WaiterPage() {
   };
 
   const pendingOrders = orders.filter((o) => o.status === 'pendiente_mozo');
-  const activeKitchenOrders = orders.filter((o) => o.status !== 'pendiente_mozo' && o.status !== 'entregado' && o.status !== 'cancelado');
   const displayedOrders = activeTab === 'pending' ? pendingOrders : orders;
 
   return (
-    <div className="flex-1 bg-navy-950 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
+    <div className="flex-1 bg-slate-50 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-white/10">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-slate-200">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 text-xs font-bold border border-blue-500/30">
+            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold border border-blue-200">
               <Users className="w-3.5 h-3.5" />
               Personal de Salón & Mozos
             </span>
             <span
               className={`flex items-center gap-1 text-[11px] px-2.5 py-0.5 rounded-full border ${
                 isConnected
-                  ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
-                  : 'bg-amber-500/20 text-amber-400 border-amber-500/30'
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                  : 'bg-amber-50 text-amber-700 border-amber-200'
               }`}
             >
               {isConnected ? <Wifi className="w-3 h-3" /> : <WifiOff className="w-3 h-3" />}
               {isConnected ? 'WebSocket Conectado' : 'Reconectando...'}
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-white">Comandas de Salón</h1>
-          <p className="text-slate-400 text-xs sm:text-sm mt-0.5">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900">Comandas de Salón</h1>
+          <p className="text-slate-600 text-xs sm:text-sm mt-0.5">
             Verifica pedidos generados por comensales en sus mesas y despáchalos a cocina.
           </p>
         </div>
@@ -89,7 +88,7 @@ export default function WaiterPage() {
         <div className="flex items-center gap-3">
           <button
             onClick={loadOrders}
-            className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 transition-colors"
+            className="p-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 shadow-xs transition-colors"
             title="Refrescar comandas"
           >
             <RefreshCw className="w-4 h-4" />
@@ -103,14 +102,14 @@ export default function WaiterPage() {
           onClick={() => setActiveTab('pending')}
           className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all ${
             activeTab === 'pending'
-              ? 'bg-amber-500 text-navy-950 shadow-lg shadow-amber-500/20'
-              : 'bg-white/5 text-slate-400 hover:text-white border border-white/5'
+              ? 'bg-amber-500 text-white shadow-md shadow-amber-500/25'
+              : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-xs'
           }`}
         >
           <Clock className="w-4 h-4" />
           <span>Pendientes de Confirmación</span>
           {pendingOrders.length > 0 && (
-            <span className="w-5 h-5 rounded-full bg-navy-950 text-amber-400 text-xs flex items-center justify-center font-black">
+            <span className="w-5 h-5 rounded-full bg-white text-amber-600 text-xs flex items-center justify-center font-black shadow-xs">
               {pendingOrders.length}
             </span>
           )}
@@ -120,8 +119,8 @@ export default function WaiterPage() {
           onClick={() => setActiveTab('all')}
           className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all ${
             activeTab === 'all'
-              ? 'bg-faro-600 text-white shadow-lg shadow-faro-600/20'
-              : 'bg-white/5 text-slate-400 hover:text-white border border-white/5'
+              ? 'bg-faro-600 text-white shadow-md shadow-faro-600/25'
+              : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-xs'
           }`}
         >
           <CheckCircle2 className="w-4 h-4" />
@@ -131,12 +130,12 @@ export default function WaiterPage() {
 
       {/* Orders Grid */}
       {displayedOrders.length === 0 ? (
-        <div className="py-20 text-center space-y-3 bg-navy-900/40 rounded-3xl border border-white/5">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 mx-auto flex items-center justify-center">
+        <div className="py-20 text-center space-y-3 bg-white rounded-3xl border border-slate-200 shadow-xs">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 mx-auto flex items-center justify-center border border-emerald-200">
             <CheckCircle2 className="w-6 h-6" />
           </div>
-          <h3 className="text-lg font-bold text-white">¡No hay pedidos pendientes en este momento!</h3>
-          <p className="text-slate-400 text-xs max-w-sm mx-auto">
+          <h3 className="text-lg font-bold text-slate-900">¡No hay pedidos pendientes en este momento!</h3>
+          <p className="text-slate-500 text-xs max-w-sm mx-auto">
             Cuando los comensales agreguen platos y confirmen desde el QR de su mesa, las alertas sonarán aquí al instante.
           </p>
         </div>
