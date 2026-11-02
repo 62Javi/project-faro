@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%" fill="none">
+  <defs>
+    <!-- Light beam gradient -->
+    <linearGradient id="beamGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#09090B" stop-opacity="0.25"/>
+      <stop offset="60%" stop-color="#09090B" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#09090B" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="towerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#18181B"/>
+      <stop offset="50%" stop-color="#27272A"/>
+      <stop offset="100%" stop-color="#09090B"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E4E4E7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Left & Right Light Beams (Atmospheric) -->
+  <polygon points="60,34 116,14 116,56" fill="url(#beamGrad)" />
+  <polygon points="60,34 4,14 4,56" fill="url(#beamGrad)" transform="rotate(180 60 34)" opacity="0.6"/>
+
+  <!-- Plinth / Ground Foundation -->
+  <rect x="26" y="98" width="68" height="6" rx="3" fill="#09090B"/>
+  <rect x="32" y="92" width="56" height="6" rx="2" fill="#27272A"/>
+
+  <!-- Lighthouse Main Tower (Trapezoid with architectural bands) -->
+  <!-- Tower Body Base -->
+  <path d="M 39 46 L 81 46 L 86 92 L 34 92 Z" fill="#18181B"/>
+
+  <!-- Architectural Contrast Stripes -->
+  <path d="M 37.4 60 L 82.6 60 L 83.9 72 L 36.1 72 Z" fill="#F4F4F5"/>
+
+  <!-- Central Watchtower Slit Windows -->
+  <rect x="58" y="50" width="4" height="7" rx="2" fill="#FFFFFF" opacity="0.9"/>
+  <rect x="58" y="78" width="4" height="9" rx="2" fill="#FFFFFF" opacity="0.9"/>
+
+  <!-- Balcony / Gallery Walkway Platform -->
+  <rect x="32" y="42" width="56" height="4" rx="2" fill="#09090B"/>
+  <!-- Railing Posts -->
+  <path d="M 36 38 L 84 38" stroke="#09090B" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="42" y1="38" x2="42" y2="42" stroke="#09090B" stroke-width="1.5"/>
+  <line x1="50" y1="38" x2="50" y2="42" stroke="#09090B" stroke-width="1.5"/>
+  <line x1="60" y1="38" x2="60" y2="42" stroke="#09090B" stroke-width="1.5"/>
+  <line x1="70" y1="38" x2="70" y2="42" stroke="#09090B" stroke-width="1.5"/>
+  <line x1="78" y1="38" x2="78" y2="42" stroke="#09090B" stroke-width="1.5"/>
+
+  <!-- Lantern Chamber (Glass Room) -->
+  <rect x="42" y="27" width="36" height="11" rx="1.5" fill="#27272A"/>
+  <rect x="46" y="28.5" width="28" height="8" rx="1" fill="#FAFAFA"/>
+
+  <!-- Beacon Core / Fresnel Lens Glow -->
+  <circle cx="60" cy="32.5" r="3.5" fill="#09090B"/>
+  <circle cx="60" cy="32.5" r="1.5" fill="#FFFFFF"/>
+
+  <!-- Lantern Roof / Dome Cap -->
+  <path d="M 40 27 C 40 27, 44 16, 60 16 C 76 16, 80 27, 80 27 Z" fill="#09090B"/>
+
+  <!-- Finial / Spire Tip -->
+  <path d="M 60 10 L 60 16" stroke="#09090B" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="60" cy="9.5" r="2" fill="#09090B"/>
+</svg>

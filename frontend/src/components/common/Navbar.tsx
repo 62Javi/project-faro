@@ -2,11 +2,17 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Flame, Sparkles, User } from 'lucide-react';
+import { Sparkles, User, Palette } from 'lucide-react';
+import { FaroLogo } from '@/components/common/FaroLogo';
 
 export function Navbar() {
   const pathname = usePathname();
   const isHome = pathname === '/';
+
+  // No mostrar la Navbar global en pantallas completas de autenticación (Login/Registro)
+  if (pathname === '/login' || pathname === '/register') {
+    return null;
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-neutral-200/70 bg-white/80 backdrop-blur-md">
@@ -14,7 +20,7 @@ export function Navbar() {
         {/* Brand */}
         <Link href="/" className="flex items-center gap-2.5 group">
           <div className="w-8 h-8 rounded-xl bg-neutral-900 flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform duration-200">
-            <Flame className="w-4 h-4 text-white" />
+            <FaroLogo size={18} className="text-white" />
           </div>
           <div className="flex items-center gap-2">
             <span className="text-base font-bold tracking-tight text-neutral-900">FARO</span>
@@ -45,6 +51,10 @@ export function Navbar() {
             <a href="#faq" className="hover:text-neutral-900 transition-colors">
               FAQ
             </a>
+            <Link href="/brand" className="hover:text-neutral-900 transition-colors flex items-center gap-1.5 text-neutral-600 font-medium">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              Logo SVG
+            </Link>
           </nav>
         ) : (
           <nav className="flex items-center gap-2">
@@ -71,7 +81,7 @@ export function Navbar() {
           </Link>
 
           <Link
-            href="/login"
+            href="/login?mode=register"
             className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-medium bg-neutral-900 hover:bg-black text-white shadow-xs transition-all active:scale-98"
           >
             <span>Registrarse</span>

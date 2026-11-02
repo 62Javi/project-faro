@@ -228,7 +228,7 @@ export default function HomePage() {
           {/* Action CTAs: Registrarse & Iniciar Sesión */}
           <div className="mt-10 flex flex-wrap justify-center items-center gap-3">
             <Link
-              href="/login"
+              href="/login?mode=register"
               className="flex items-center gap-2 px-7 py-3 rounded-full bg-neutral-900 hover:bg-black text-white font-medium text-sm shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-98"
             >
               <span>Registrarse gratis</span>
@@ -1127,7 +1127,7 @@ export default function HomePage() {
           <div className="flex items-center gap-2">
             <Flame className="w-3.5 h-3.5 text-neutral-900" />
             <span className="font-semibold text-neutral-900">Faro SaaS Gastronómico</span>
-            <span className="text-neutral-400">&middot; Desarrollo de Software Cloud (UTN FRLP 2026)</span>
+            <span className="text-neutral-400">&middot; Operación gastronómica en tiempo real</span>
           </div>
 
           <div className="flex items-center gap-4 font-medium">

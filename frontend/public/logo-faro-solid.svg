@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <!-- Bold Modern Solid Silhouette Mark -->
+  <defs>
+    <linearGradient id="solidBeam" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Ground Base -->
+  <path d="M 22 84 C 22 82.3 23.3 81 25 81 L 75 81 C 76.7 81 78 82.3 78 84 C 78 85.7 76.7 87 75 87 L 25 87 C 23.3 87 22 85.7 22 84 Z" fill="currentColor"/>
+
+  <!-- Tower Body (Solid with crisp negative space gaps) -->
+  <path d="M 33 80 L 35 70 L 65 70 L 67 80 Z" fill="currentColor"/>
+  <path d="M 36.5 66 L 39 54 L 61 54 L 63.5 66 Z" fill="currentColor"/>
+  <path d="M 40.5 50 L 42.5 40 L 57.5 40 L 59.5 50 Z" fill="currentColor"/>
+
+  <!-- Balcony / Gallery Deck -->
+  <rect x="34" y="37" width="32" height="3" rx="1.5" fill="currentColor"/>
+
+  <!-- Lantern House -->
+  <rect x="42" y="27" width="16" height="10" rx="1.5" fill="currentColor"/>
+  <!-- Beacon Lens / Negative Space Core -->
+  <circle cx="50" cy="32" r="2.8" fill="#FFFFFF"/>
+
+  <!-- Dome Roof -->
+  <path d="M 40 27 C 40 21 60 21 60 27 Z" fill="currentColor"/>
+
+  <!-- Spire Finial -->
+  <line x1="50" y1="17" x2="50" y2="22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="50" cy="15.5" r="1.5" fill="currentColor"/>
+
+  <!-- Expanding Luminous Beam (Facing Forward/Right) -->
+  <polygon points="58,32 94,18 94,46" fill="url(#solidBeam)" opacity="0.8"/>
+</svg>

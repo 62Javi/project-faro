@@ -1,26 +1,63 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { Flame, ArrowRight, Loader2, Lock, Mail, Eye, EyeOff, Store, Bell, ChefHat, Sparkles } from 'lucide-react';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import {
+  Flame,
+  ArrowRight,
+  Loader2,
+  Lock,
+  Mail,
+  Eye,
+  EyeOff,
+  Store,
+  Bell,
+  ChefHat,
+  User,
+  CheckCircle2,
+  ArrowLeft
+} from 'lucide-react';
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  
+  const initialMode = searchParams.get('mode') === 'register' || pathname === '/register' ? 'register' : 'login';
+  const [mode, setMode] = useState<'login' | 'register'>(initialMode);
+
+  // Form states
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [restaurantName, setRestaurantName] = useState('');
+  const [fullName, setFullName] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedRole, setSelectedRole] = useState<'dueño' | 'mozo' | 'cocina' | null>(null);
+
+  // Synchronize mode if searchParams or route change
+  useEffect(() => {
+    const urlMode = searchParams.get('mode');
+    if (urlMode === 'register' || pathname === '/register') {
+      setMode('register');
+    } else if (urlMode === 'login') {
+      setMode('login');
+    }
+  }, [searchParams, pathname]);
 
   const handleLogin = (e?: React.FormEvent, directRole?: 'dueño' | 'mozo' | 'cocina') => {
     if (e) e.preventDefault();
     setIsLoading(true);
 
-    const targetRole = directRole || selectedRole || (
-      email.toLowerCase().includes('mozo') ? 'mozo' :
-      email.toLowerCase().includes('cocina') ? 'cocina' : 'dueño'
-    );
+    const targetRole =
+      directRole ||
+      selectedRole ||
+      (email.toLowerCase().includes('mozo')
+        ? 'mozo'
+        : email.toLowerCase().includes('cocina')
+        ? 'cocina'
+        : 'dueño');
 
     setTimeout(() => {
       if (targetRole === 'mozo') {
@@ -33,6 +70,16 @@ export default function LoginPage() {
     }, 700);
   };
 
+  const handleRegister = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    setTimeout(() => {
+      // Registro simulado exitoso: el dueño entra directamente al panel administrativo
+      router.push('/admin');
+    }, 800);
+  };
+
   const handleQuickRole = (role: 'dueño' | 'mozo' | 'cocina', demoEmail: string) => {
     setSelectedRole(role);
     setEmail(demoEmail);
@@ -41,7 +88,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex-1 bg-white min-h-[calc(100vh-64px)] flex flex-col lg:flex-row overflow-hidden">
+    <div className="flex-1 bg-white min-h-screen flex flex-col lg:flex-row overflow-hidden">
       {/* =========================================================================
           LEFT PANEL: INCREASE-INSPIRED ISOMETRIC 3D SCULPTURE
       ========================================================================= */}
@@ -95,10 +142,6 @@ export default function LoginPage() {
                     <stop offset="0%" stopColor="#A1A1AA" />
                     <stop offset="100%" stopColor="#E4E4E7" />
                   </linearGradient>
-                  <linearGradient id="accentGlow" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#09090B" stopOpacity="0.8" />
-                    <stop offset="100%" stopColor="#27272A" stopOpacity="0.3" />
-                  </linearGradient>
                 </defs>
 
                 {/* Isometric Zigzag Ribbon Faces (Increase-Style Geometric Prism) */}
@@ -117,7 +160,7 @@ export default function LoginPage() {
                 <polygon points="230,140 290,110 290,200 230,230" fill="url(#facet4)" />
                 <polygon points="170,110 230,140 230,230 170,200" fill="url(#facet2)" />
 
-                {/* Dynamic Light Accent Line (Increase Laser Precision) */}
+                {/* Dynamic Light Accent Line */}
                 <line x1="50" y1="140" x2="290" y2="110" stroke="#FFFFFF" strokeWidth="1.5" strokeDasharray="6 4" opacity="0.75" />
               </svg>
             </div>
@@ -134,23 +177,24 @@ export default function LoginPage() {
         </div>
 
         {/* Bottom Metadata */}
-        <div className="relative z-10 flex items-center justify-between text-[11px] text-neutral-400 font-mono">
-          <span>UTN FRLP &middot; Software Cloud</span>
-          <span>FastAPI + WebSockets + Next.js</span>
+        <div className="relative z-10 flex items-center justify-between text-[11px] text-neutral-400 font-normal">
+          <span>&copy; {new Date().getFullYear()} Faro Technologies</span>
+          <span>Privacidad &middot; Términos</span>
         </div>
       </div>
 
       {/* =========================================================================
           RIGHT PANEL: SLEEK MOBBIN FORM (WITH SLIDE-IN CHOREOGRAPHY)
       ========================================================================= */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-between p-6 sm:p-12 lg:p-16 bg-white animate-slideRight">
-        {/* Top bar back link */}
+      <div className="w-full lg:w-1/2 flex flex-col justify-between p-6 sm:p-12 lg:p-16 bg-white animate-slideRight overflow-y-auto">
+        {/* Top bar */}
         <div className="flex items-center justify-between">
           <Link
             href="/"
-            className="text-xs font-medium text-neutral-500 hover:text-neutral-900 transition-colors flex items-center gap-1.5"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-neutral-500 hover:text-neutral-900 transition-colors px-3 py-1.5 rounded-full hover:bg-neutral-100"
           >
-            &larr; Volver al inicio
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Volver al inicio</span>
           </Link>
 
           <span className="text-[10px] uppercase font-semibold tracking-wider px-2.5 py-1 rounded-full bg-neutral-100 text-neutral-600 border border-neutral-200/60">
@@ -160,143 +204,259 @@ export default function LoginPage() {
 
         {/* Center Form Card */}
         <div className="my-auto max-w-sm w-full mx-auto py-8">
-          {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-neutral-900">
+          {/* Segmented Mode Selector Capsule */}
+          <div className="flex p-1 bg-neutral-100/90 rounded-full mb-8 border border-neutral-200/60">
+            <button
+              type="button"
+              onClick={() => setMode('login')}
+              className={`flex-1 py-1.5 px-3 rounded-full text-xs transition-all duration-200 ${
+                mode === 'login'
+                  ? 'bg-white text-neutral-900 shadow-2xs font-semibold'
+                  : 'text-neutral-500 hover:text-neutral-900 font-medium'
+              }`}
+            >
               Iniciar sesión
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode('register')}
+              className={`flex-1 py-1.5 px-3 rounded-full text-xs transition-all duration-200 ${
+                mode === 'register'
+                  ? 'bg-white text-neutral-900 shadow-2xs font-semibold'
+                  : 'text-neutral-500 hover:text-neutral-900 font-medium'
+              }`}
+            >
+              Registrar restaurante
+            </button>
+          </div>
+
+          {/* Form Header */}
+          <div className="mb-6">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-neutral-900">
+              {mode === 'login' ? 'Iniciar sesión' : 'Crear restaurante'}
             </h1>
             <p className="text-xs sm:text-sm text-neutral-500 mt-1.5 leading-relaxed">
-              Ingresá con tu cuenta para acceder a tu estación de trabajo.
+              {mode === 'login'
+                ? 'Ingresá con tu cuenta para acceder a tu estación de trabajo.'
+                : 'Empezá a operar con cartas QR, mozos y cocina en tiempo real sin tarjeta de crédito.'}
             </p>
           </div>
 
-          {/* Form */}
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label className="block text-xs font-medium text-neutral-700 mb-1.5">
-                Correo electrónico
-              </label>
-              <div className="relative">
-                <Mail className="w-4 h-4 text-neutral-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="nombre@restaurante.com"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-full bg-neutral-100/70 border border-transparent focus:border-neutral-300 focus:bg-white text-xs sm:text-sm text-neutral-900 placeholder:text-neutral-400 outline-none transition-all"
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="text-xs font-medium text-neutral-700">
-                  Contraseña
+          {/* MODE 1: LOGIN FORM */}
+          {mode === 'login' ? (
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-neutral-700 mb-1.5">
+                  Correo electrónico
                 </label>
-                <a href="#" className="text-[11px] font-medium text-neutral-400 hover:text-neutral-900 transition-colors">
-                  ¿Olvidaste tu clave?
-                </a>
+                <div className="relative">
+                  <Mail className="w-4 h-4 text-neutral-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="nombre@restaurante.com"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-full bg-neutral-100/70 border border-transparent focus:border-neutral-300 focus:bg-white text-xs sm:text-sm text-neutral-900 placeholder:text-neutral-400 outline-none transition-all"
+                  />
+                </div>
               </div>
-              <div className="relative">
-                <Lock className="w-4 h-4 text-neutral-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full pl-10 pr-10 py-2.5 rounded-full bg-neutral-100/70 border border-transparent focus:border-neutral-300 focus:bg-white text-xs sm:text-sm text-neutral-900 placeholder:text-neutral-400 outline-none transition-all"
-                />
+
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="text-xs font-medium text-neutral-700">
+                    Contraseña
+                  </label>
+                  <a href="#" className="text-[11px] font-medium text-neutral-400 hover:text-neutral-900 transition-colors">
+                    ¿Olvidaste tu clave?
+                  </a>
+                </div>
+                <div className="relative">
+                  <Lock className="w-4 h-4 text-neutral-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full pl-10 pr-10 py-2.5 rounded-full bg-neutral-100/70 border border-transparent focus:border-neutral-300 focus:bg-white text-xs sm:text-sm text-neutral-900 placeholder:text-neutral-400 outline-none transition-all"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700 p-1"
+                  >
+                    {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full py-3 px-4 rounded-full bg-neutral-900 hover:bg-black text-white text-xs sm:text-sm font-semibold transition-all shadow-xs active:scale-98 disabled:opacity-50 flex items-center justify-center gap-2 mt-3"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin text-neutral-300" />
+                    <span>Autenticando...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Continuar</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </>
+                )}
+              </button>
+            </form>
+          ) : (
+            /* MODE 2: REGISTER FORM */
+            <form onSubmit={handleRegister} className="space-y-3.5">
+              <div>
+                <label className="block text-xs font-medium text-neutral-700 mb-1">
+                  Nombre del restaurante
+                </label>
+                <div className="relative">
+                  <Store className="w-4 h-4 text-neutral-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    required
+                    value={restaurantName}
+                    onChange={(e) => setRestaurantName(e.target.value)}
+                    placeholder="Ej: Parrilla Don Julio"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-full bg-neutral-100/70 border border-transparent focus:border-neutral-300 focus:bg-white text-xs sm:text-sm text-neutral-900 placeholder:text-neutral-400 outline-none transition-all"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-neutral-700 mb-1">
+                  Tu nombre y apellido
+                </label>
+                <div className="relative">
+                  <User className="w-4 h-4 text-neutral-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    required
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    placeholder="Ej: Javier López"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-full bg-neutral-100/70 border border-transparent focus:border-neutral-300 focus:bg-white text-xs sm:text-sm text-neutral-900 placeholder:text-neutral-400 outline-none transition-all"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-neutral-700 mb-1">
+                  Correo electrónico
+                </label>
+                <div className="relative">
+                  <Mail className="w-4 h-4 text-neutral-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="dueño@tu-restaurante.com"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-full bg-neutral-100/70 border border-transparent focus:border-neutral-300 focus:bg-white text-xs sm:text-sm text-neutral-900 placeholder:text-neutral-400 outline-none transition-all"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-neutral-700 mb-1">
+                  Contraseña segura
+                </label>
+                <div className="relative">
+                  <Lock className="w-4 h-4 text-neutral-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Mínimo 8 caracteres"
+                    className="w-full pl-10 pr-10 py-2.5 rounded-full bg-neutral-100/70 border border-transparent focus:border-neutral-300 focus:bg-white text-xs sm:text-sm text-neutral-900 placeholder:text-neutral-400 outline-none transition-all"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700 p-1"
+                  >
+                    {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
+              </div>
+
+              <div className="pt-2">
                 <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700 p-1"
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full py-3 px-4 rounded-full bg-neutral-900 hover:bg-black text-white text-xs sm:text-sm font-semibold transition-all shadow-xs active:scale-98 disabled:opacity-50 flex items-center justify-center gap-2"
                 >
-                  {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin text-neutral-300" />
+                      <span>Creando tu espacio...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Registrar restaurante gratis</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </>
+                  )}
                 </button>
               </div>
-            </div>
 
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full py-3 px-4 rounded-full bg-neutral-900 hover:bg-black text-white text-xs sm:text-sm font-semibold transition-all shadow-xs active:scale-98 disabled:opacity-50 flex items-center justify-center gap-2 mt-3"
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin text-neutral-300" />
-                  <span>Autenticando...</span>
-                </>
-              ) : (
-                <>
-                  <span>Continuar</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </>
-              )}
-            </button>
-          </form>
-
-          {/* Hairline Divider */}
-          <div className="relative my-7">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-neutral-100" />
-            </div>
-            <div className="relative flex justify-center text-[10px] uppercase font-semibold">
-              <span className="bg-white px-3 text-neutral-400 tracking-wider">
-                Acceso Rápido Demo (Cátedra UTN)
-              </span>
-            </div>
-          </div>
-
-          {/* Quick Role Tester Pills */}
-          <div className="grid grid-cols-3 gap-2">
-            <button
-              type="button"
-              onClick={() => handleQuickRole('dueño', 'dueño@faro.app')}
-              className="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-neutral-50/80 hover:bg-neutral-100 border border-neutral-200/60 hover:border-neutral-300 transition-all text-center group active:scale-95"
-            >
-              <div className="w-7 h-7 rounded-lg bg-white border border-neutral-200/80 group-hover:bg-neutral-900 group-hover:text-white flex items-center justify-center text-neutral-800 transition-colors shadow-2xs">
-                <Store className="w-3.5 h-3.5" />
+              {/* Guarantees pill */}
+              <div className="flex items-center justify-center gap-2 pt-3 text-[11px] text-neutral-500 font-normal">
+                <CheckCircle2 className="w-3.5 h-3.5 text-neutral-700" />
+                <span>14 días de prueba gratis &middot; Sin tarjeta de crédito</span>
               </div>
-              <span className="text-[11px] font-semibold text-neutral-800 leading-none">Dueño</span>
-              <span className="text-[9px] text-neutral-400">/admin</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleQuickRole('mozo', 'mozo1@faro.app')}
-              className="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-neutral-50/80 hover:bg-neutral-100 border border-neutral-200/60 hover:border-neutral-300 transition-all text-center group active:scale-95"
-            >
-              <div className="w-7 h-7 rounded-lg bg-white border border-neutral-200/80 group-hover:bg-neutral-900 group-hover:text-white flex items-center justify-center text-neutral-800 transition-colors shadow-2xs">
-                <Bell className="w-3.5 h-3.5" />
-              </div>
-              <span className="text-[11px] font-semibold text-neutral-800 leading-none">Mozo</span>
-              <span className="text-[9px] text-neutral-400">/waiter</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleQuickRole('cocina', 'cocina@faro.app')}
-              className="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-neutral-50/80 hover:bg-neutral-100 border border-neutral-200/60 hover:border-neutral-300 transition-all text-center group active:scale-95"
-            >
-              <div className="w-7 h-7 rounded-lg bg-white border border-neutral-200/80 group-hover:bg-neutral-900 group-hover:text-white flex items-center justify-center text-neutral-800 transition-colors shadow-2xs">
-                <ChefHat className="w-3.5 h-3.5" />
-              </div>
-              <span className="text-[11px] font-semibold text-neutral-800 leading-none">Cocina</span>
-              <span className="text-[9px] text-neutral-400">/kitchen</span>
-            </button>
-          </div>
+            </form>
+          )}
         </div>
 
-        {/* Footer */}
+        {/* Footer switch prompt */}
         <div className="text-center pt-6 border-t border-neutral-100 text-xs text-neutral-400">
-          <span>¿Aún no tenés cuenta? </span>
-          <Link href="/#precios" className="text-neutral-900 font-semibold hover:underline">
-            Ver planes disponibles
-          </Link>
+          {mode === 'login' ? (
+            <>
+              <span>¿Aún no tenés cuenta? </span>
+              <button
+                type="button"
+                onClick={() => setMode('register')}
+                className="text-neutral-900 font-semibold hover:underline"
+              >
+                Registrar restaurante gratis
+              </button>
+            </>
+          ) : (
+            <>
+              <span>¿Ya tenés cuenta creada? </span>
+              <button
+                type="button"
+                onClick={() => setMode('login')}
+                className="text-neutral-900 font-semibold hover:underline"
+              >
+                Iniciar sesión
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-white flex items-center justify-center">
+          <Loader2 className="w-6 h-6 animate-spin text-neutral-400" />
+        </div>
+      }
+    >
+      <LoginContent />
+    </Suspense>
   );
 }
