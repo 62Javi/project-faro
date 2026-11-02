@@ -1,100 +1,26 @@
 import React from 'react';
 
 interface FaroLogoProps extends React.SVGProps<SVGSVGElement> {
-  variant?: 'minimal' | 'architectural' | 'solid';
   size?: number | string;
   className?: string;
 }
 
 export function FaroLogo({
-  variant = 'minimal',
   size = 24,
   className = '',
   ...props
 }: FaroLogoProps) {
-  if (variant === 'architectural') {
-    return (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 120 120"
-        width={size}
-        height={size}
-        fill="none"
-        className={className}
-        {...props}
-      >
-        <polygon points="60,34 116,14 116,56" fill="currentColor" opacity="0.25" />
-        <polygon points="60,34 4,14 4,56" fill="currentColor" opacity="0.15" />
-        <rect x="26" y="98" width="68" height="6" rx="3" fill="currentColor" />
-        <rect x="32" y="92" width="56" height="6" rx="2" fill="currentColor" opacity="0.8" />
-        <path d="M 39 46 L 81 46 L 86 92 L 34 92 Z" fill="currentColor" />
-        <path d="M 37.4 60 L 82.6 60 L 83.9 72 L 36.1 72 Z" fill="#FFFFFF" opacity="0.9" />
-        <rect x="58" y="50" width="4" height="7" rx="2" fill="#FFFFFF" />
-        <rect x="58" y="78" width="4" height="9" rx="2" fill="#FFFFFF" />
-        <rect x="32" y="42" width="56" height="4" rx="2" fill="currentColor" />
-        <path d="M 36 38 L 84 38" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-        <line x1="42" y1="38" x2="42" y2="42" stroke="currentColor" stroke-width="1.5" />
-        <line x1="50" y1="38" x2="50" y2="42" stroke="currentColor" stroke-width="1.5" />
-        <line x1="60" y1="38" x2="60" y2="42" stroke="currentColor" stroke-width="1.5" />
-        <line x1="70" y1="38" x2="70" y2="42" stroke="currentColor" stroke-width="1.5" />
-        <line x1="78" y1="38" x2="78" y2="42" stroke="currentColor" stroke-width="1.5" />
-        <rect x="42" y="27" width="36" height="11" rx="1.5" fill="currentColor" opacity="0.9" />
-        <rect x="46" y="28.5" width="28" height="8" rx="1" fill="#FFFFFF" />
-        <circle cx="60" cy="32.5" r="3.5" fill="currentColor" />
-        <circle cx="60" cy="32.5" r="1.5" fill="#FFFFFF" />
-        <path d="M 40 27 C 40 27, 44 16, 60 16 C 76 16, 80 27, 80 27 Z" fill="currentColor" />
-        <path d="M 60 10 L 60 16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
-        <circle cx="60" cy="9.5" r="2" fill="currentColor" />
-      </svg>
-    );
-  }
-
-  if (variant === 'solid') {
-    return (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 100 100"
-        width={size}
-        height={size}
-        className={className}
-        {...props}
-      >
-        <path d="M 22 84 C 22 82.3 23.3 81 25 81 L 75 81 C 76.7 81 78 82.3 78 84 C 78 85.7 76.7 87 75 87 L 25 87 C 23.3 87 22 85.7 22 84 Z" fill="currentColor" />
-        <path d="M 33 80 L 35 70 L 65 70 L 67 80 Z" fill="currentColor" />
-        <path d="M 36.5 66 L 39 54 L 61 54 L 63.5 66 Z" fill="currentColor" />
-        <path d="M 40.5 50 L 42.5 40 L 57.5 40 L 59.5 50 Z" fill="currentColor" />
-        <rect x="34" y="37" width="32" height="3" rx="1.5" fill="currentColor" />
-        <rect x="42" y="27" width="16" height="10" rx="1.5" fill="currentColor" />
-        <circle cx="50" cy="32" r="2.8" fill="#FFFFFF" />
-        <path d="M 40 27 C 40 21 60 21 60 27 Z" fill="currentColor" />
-        <line x1="50" y1="17" x2="50" y2="22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
-        <circle cx="50" cy="15.5" r="1.5" fill="currentColor" />
-        <polygon points="58,32 94,18 94,46" fill="currentColor" opacity="0.35" />
-      </svg>
-    );
-  }
-
-  // Default: Minimalist Swiss Vector
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 100 100"
+      viewBox="20 16 236 274"
       width={size}
       height={size}
-      fill="none"
-      stroke="currentColor"
+      fill="currentColor"
       className={className}
       {...props}
     >
-      <path d="M50 14 V20 M42 28 C42 22 58 22 58 28 Z" fill="currentColor" stroke="none" />
-      <rect x="42.5" y="28" width="15" height="10" rx="1.5" stroke="currentColor" stroke-width="2.5" fill="none" />
-      <circle cx="50" cy="33" r="2.5" fill="currentColor" stroke="none" />
-      <line x1="36" y1="38" x2="64" y2="38" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
-      <path d="M41 40 L34 82 H66 L59 40 Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" fill="none" />
-      <line x1="39" y1="54" x2="61" y2="54" stroke="currentColor" stroke-width="2.5" />
-      <line x1="36.5" y1="68" x2="63.5" y2="68" stroke="currentColor" stroke-width="2.5" />
-      <line x1="26" y1="84" x2="74" y2="84" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" />
-      <path d="M58 31 L88 20 M58 35 L92 37 M58 37 L88 48" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.85" />
+      <path d="M 235.50 284.37 C 240.88 283.13 239.16 282.37 229.00 281.50 C 223.99 281.06 218.98 279.99 216.79 278.88 C 214.75 277.85 212.10 277.00 210.89 277.00 C 209.68 277.00 206.56 274.99 203.90 272.50 C 198.58 267.53 197.57 267.17 196.10 269.75 C 195.16 271.38 194.99 271.35 193.58 269.38 C 192.75 268.22 190.82 266.99 189.29 266.66 C 187.37 266.24 185.65 264.63 183.79 261.53 C 181.85 258.28 180.43 257.00 178.79 256.98 C 174.92 256.96 174.32 255.79 173.69 247.00 C 171.13 211.67 165.62 138.41 164.10 119.50 L 162.26 96.50 L 164.63 93.67 C 165.93 92.12 167.00 90.24 167.00 89.50 C 167.00 88.76 168.12 86.82 169.50 85.18 C 170.88 83.55 172.00 81.73 172.00 81.14 C 172.00 80.06 166.96 78.41 161.50 77.71 C 158.62 77.34 158.50 77.12 158.40 72.11 C 158.35 69.25 157.78 66.38 157.15 65.75 C 155.56 64.16 155.59 43.81 157.18 42.22 C 157.83 41.57 158.17 40.88 157.93 40.69 C 138.76 25.59 137.20 24.08 137.35 20.78 C 137.49 17.77 137.25 17.50 134.50 17.50 C 131.75 17.50 131.50 17.79 131.50 20.92 C 131.50 24.04 130.65 25.05 122.14 31.98 L 112.77 39.61 L 112.50 52.56 C 112.35 59.68 112.20 68.04 112.17 71.15 L 112.11 76.80 L 107.81 77.47 C 98.48 78.92 94.57 81.38 98.11 83.57 C 98.73 83.95 100.11 86.25 101.18 88.68 C 102.34 91.29 104.20 93.59 105.70 94.27 C 108.23 95.42 108.25 95.56 107.62 103.47 C 107.26 107.89 105.86 127.92 104.49 148.00 C 102.20 181.66 98.86 227.49 97.44 244.63 L 96.85 251.77 L 93.48 250.73 C 88.70 249.27 85.52 251.56 83.78 257.72 C 82.48 262.35 82.31 262.50 77.87 263.14 C 71.88 263.99 68.81 265.67 59.93 272.92 C 51.91 279.48 49.48 280.31 34.71 281.58 C 30.42 281.94 27.19 282.53 27.52 282.87 C 27.86 283.22 32.04 284.01 36.82 284.64 C 47.41 286.04 229.30 285.78 235.50 284.37 Z M 127.00 217.00 L 127.00 203.00 L 133.50 203.00 L 140.00 203.00 L 140.00 217.00 L 140.00 231.00 L 133.50 231.00 L 127.00 231.00 L 127.00 217.00 Z M 114.50 156.81 C 114.23 156.09 114.13 151.45 114.26 146.50 L 114.50 137.50 L 118.25 137.19 L 122.00 136.88 L 122.00 140.94 C 122.00 143.28 121.52 145.00 120.88 145.00 C 120.07 145.00 120.09 145.41 120.94 146.42 C 121.60 147.22 121.98 149.97 121.81 152.67 C 121.51 157.32 121.38 157.51 118.24 157.81 C 116.22 158.01 114.80 157.63 114.50 156.81 Z M 103.59 83.31 C 106.36 81.29 114.67 80.80 140.29 81.16 C 160.53 81.44 165.20 81.77 166.43 83.00 C 167.76 84.33 164.26 84.50 134.95 84.50 C 109.17 84.50 102.32 84.24 103.59 83.31 Z M 102.66 73.75 C 102.38 73.06 102.16 73.62 102.16 75.00 C 102.16 76.38 102.38 76.94 102.66 76.25 C 102.94 75.56 102.94 74.44 102.66 73.75 Z M 109.50 68.00 C 109.87 67.40 108.78 67.04 106.81 67.10 C 103.70 67.19 103.65 67.25 106.00 68.00 C 107.38 68.44 108.59 68.85 108.69 68.90 C 108.80 68.96 109.16 68.55 109.50 68.00 Z M 116.67 65.33 C 116.30 64.97 116.00 59.57 116.00 53.33 C 116.00 42.08 116.02 42.00 118.37 42.00 C 120.53 42.00 120.80 42.54 121.42 48.00 C 122.42 56.81 121.20 66.00 119.04 66.00 C 118.10 66.00 117.03 65.70 116.67 65.33 Z M 124.00 54.03 L 124.00 42.00 L 135.03 42.00 L 146.06 42.00 L 145.78 53.75 L 145.50 65.50 L 134.75 65.78 L 124.00 66.07 L 124.00 54.03 Z M 148.67 65.33 C 147.84 64.50 147.81 47.32 148.63 44.25 C 149.04 42.71 149.99 42.00 151.62 42.00 C 154.00 42.00 154.00 42.02 154.00 54.00 C 154.00 65.90 153.98 66.00 151.67 66.00 C 150.38 66.00 149.03 65.70 148.67 65.33 Z" fillRule="evenodd" />
     </svg>
   );
 }

@@ -22,12 +22,7 @@ export function Navbar() {
           <div className="w-8 h-8 rounded-xl bg-neutral-900 flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform duration-200">
             <FaroLogo size={18} className="text-white" />
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-base font-bold tracking-tight text-neutral-900">FARO</span>
-            <span className="hidden sm:inline-block text-[10px] font-medium tracking-wide uppercase px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-600 border border-neutral-200/60">
-              SaaS Gastronómico
-            </span>
-          </div>
+          <span className="text-base font-bold tracking-tight text-neutral-900">FARO</span>
         </Link>
 
         {/* Navigation Links */}
@@ -51,10 +46,6 @@ export function Navbar() {
             <a href="#faq" className="hover:text-neutral-900 transition-colors">
               FAQ
             </a>
-            <Link href="/brand" className="hover:text-neutral-900 transition-colors flex items-center gap-1.5 text-neutral-600 font-medium">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-              Logo SVG
-            </Link>
           </nav>
         ) : (
           <nav className="flex items-center gap-2">

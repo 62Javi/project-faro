@@ -4,6 +4,7 @@ import { useState, useId } from 'react';
 import Link from 'next/link';
 import { QRCodeSVG } from 'qrcode.react';
 import confetti from 'canvas-confetti';
+import { FaroLogo } from '@/components/common/FaroLogo';
 import {
   Flame,
   Sparkles,
@@ -203,15 +204,6 @@ export default function HomePage() {
       ========================================================================= */}
       <section className="relative pt-12 pb-20 sm:pt-20 sm:pb-28 overflow-hidden border-b border-neutral-200/70 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          {/* Eyebrow badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-neutral-200 shadow-xs text-xs font-medium text-neutral-800 mb-8 transition-all hover:border-neutral-300">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neutral-400 opacity-60"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-neutral-900"></span>
-            </span>
-            <span>Faro &middot; Plataforma de Operación Gastronómica</span>
-          </div>
-
           {/* Main Headline */}
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-neutral-900 tracking-tight max-w-5xl mx-auto leading-[1.08]">
             El sistema operativo gastronómico que sincroniza{' '}
@@ -1125,8 +1117,8 @@ export default function HomePage() {
       <footer className="py-8 bg-white border-t border-neutral-200/70 text-xs text-neutral-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <Flame className="w-3.5 h-3.5 text-neutral-900" />
-            <span className="font-semibold text-neutral-900">Faro SaaS Gastronómico</span>
+            <FaroLogo size={16} className="text-neutral-900" />
+            <span className="font-semibold text-neutral-900">Faro</span>
             <span className="text-neutral-400">&middot; Operación gastronómica en tiempo real</span>
           </div>
 
